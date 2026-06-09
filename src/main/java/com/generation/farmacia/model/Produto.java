@@ -1,26 +1,25 @@
 package com.generation.farmacia.model;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table (name = "tb_categorias")
-public class Categoria {
+@Table(name = "tb_produtos")
+public class Produto {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY )
 	private Long id;
 	
 	@NotBlank(message = "O atributo nome é obrigatório!")
@@ -31,10 +30,17 @@ public class Categoria {
 	@Size(min = 5, max = 300, message = "O atributo descrição deve conter no mínimo 05 e no máximo 300 caracteres")
 	private String descricao;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "categoria", cascade = CascadeType.REMOVE)
-	@JsonIgnoreProperties(value = "categoria", allowSetters = true)
-	private List<Produto> produto;
-
+	@NotNull(message = "O atributo preço é obrigatório!")
+	@Positive(message = "O preço deve ser positivo!")
+	private Double preco;
+	
+	@NotNull(message = "O estoque é obrigatório!")
+	private Integer estoque;
+	
+	@ManyToOne
+	@JoinColumn(name = "categoria_id")
+	@JsonIgnoreProperties("produto")
+	private Categoria categoria;
 
 	public Long getId() {
 		return id;
@@ -60,12 +66,28 @@ public class Categoria {
 		this.descricao = descricao;
 	}
 
-	public List<Produto> getProduto() {
-		return produto;
+	public Double getPreco() {
+		return preco;
 	}
 
-	public void setProduto(List<Produto> produto) {
-		this.produto = produto;
+	public void setPreco(Double preco) {
+		this.preco = preco;
+	}
+
+	public Integer getEstoque() {
+		return estoque;
+	}
+
+	public void setEstoque(Integer estoque) {
+		this.estoque = estoque;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 	
 	
