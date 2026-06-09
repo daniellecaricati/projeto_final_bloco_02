@@ -54,7 +54,7 @@ public class ProdutoController {
 	
 	@PostMapping
 	public ResponseEntity<Produto> post(@Valid @RequestBody Produto produto) {
-		
+    
 		if (categoriaRepository.existsById(produto.getCategoria().getId())) {
 			
 			produto.setId(null);
